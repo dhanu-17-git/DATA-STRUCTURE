@@ -648,19 +648,3 @@ int main() {
 }
 ```
 
----
-
-## 🏁 End of Module 1
-
-*Pointers & Data Structures Fundamentals — teacher-style, GitHub-friendly notes.*  
-*Filename suggestion: `Module1_Pointers_and_DataStructures.md`*
-```
-
-This format should work perfectly on GitHub with:
-- Proper code blocks with language specification
-- Correct table formatting
-- Proper heading hierarchy
-- Clean emoji usage
-- Consistent indentation and spacing
-
-You can copy and paste this directly into a `.md` file in your GitHub repository.
