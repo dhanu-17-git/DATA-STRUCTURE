@@ -12,7 +12,7 @@ But if you *arrange them properly* (say, alphabetically), finding one is fast. T
 There’s no single syntax — data structures are implemented using language constructs (arrays, structs, pointers, classes, etc.).
 
 ### ⚙ Example
-```c
+
 int marks[5] = {45, 67, 88, 56, 92};  // Array = basic data structure
 
 🔑 Key Points
