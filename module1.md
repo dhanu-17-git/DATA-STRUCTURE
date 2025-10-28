@@ -1,6 +1,4 @@
-Here's the corrected markdown format that will work properly on GitHub:
 
-```markdown
 # 📘 Data Structures & Pointers - Module 1
 
 ## 1. What is a Data Structure?
