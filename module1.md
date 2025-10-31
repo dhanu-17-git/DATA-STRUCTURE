@@ -565,6 +565,8 @@ X = 12, Y = 8
 | 2️⃣ Whole structure      | Copy          | ❌ No              | ⚠️ No (creates copy) |
 | 3️⃣ Pointer to structure | Address       | ✅ Yes             | ✅ Very efficient     |
 
+---
+
 
 ## 🔁 Self-Referential Structures
 
