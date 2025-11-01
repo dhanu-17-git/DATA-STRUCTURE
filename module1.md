@@ -1,825 +1,653 @@
 
-# 📘 Data Structures & Pointers - Module 1
+````md
+# ☕ JAVA MODULE 1 — Core Concepts + OOP (Complete Notes)
 
-## 1. What is a Data Structure?
+---
+
+## 📘 1. Introduction to Java
 
 ### 🧩 Definition
-A *data structure* is a way to store and organize data in memory so that we can *use it efficiently*.
+**Java** is an object-oriented, platform-independent programming language developed by *James Gosling* at Sun Microsystems (now owned by Oracle).
 
-### 💡 Concept Explanation
-Think of it like a *bookshelf*. If you just throw books randomly on the floor, finding one takes forever.  
-But if you *arrange them properly* (say, alphabetically), finding one is fast. That's what a data structure does for your program.
-
-### 🧱 Syntax
-There's no single syntax — data structures are implemented using language constructs (arrays, structs, pointers, classes, etc.).
+### 💡 Concept
+Java code is compiled into **bytecode** (not machine code) by the *Java Compiler (javac)*, and executed by the **Java Virtual Machine (JVM)**, making it **Write Once, Run Anywhere (WORA)**.
 
 ### ⚙ Example
-```c
-int marks[5] = {45, 67, 88, 56, 92};  // Array = basic data structure
-```
-
-### 🔑 Key Points
-- Organizes data for efficiency
-- Improves access and update speed
-- Common examples: Array, Linked List, Stack, Queue, Tree, Graph
-- Core of algorithm design and real-world software
-
----
-
-## 🧭 2. Pointers in C
-
-### 🧩 Definition
-A pointer is a variable that stores the memory address of another variable.
-
-### 💡 Concept Explanation
-When you declare `int x = 10;`, memory is reserved to hold `x`. A pointer stores the address of that memory location.  
-Pointers let you access or change the data at that address directly — powerful and dangerous.
-
-### 🧱 Syntax
-```c
-data_type *pointer_name;
-```
-
-### ⚙ Example
-```c
-int x = 10;
-int *ptr = &x;    // ptr stores address of x
-printf("x = %d\n", *ptr);     // dereference -> prints 10
-printf("Address of x = %p\n", ptr);
-```
-
-### 🔑 Key Points
-- `&` — address-of operator (gives address)
-- `*` — dereference operator (gives value at address)
-- Useful for arrays, dynamic memory, function parameters, and complex data structures
-
----
-
-## 🗃 Symbol Table & Relative Address
-
-**Symbol Table:**
-A data structure used by compilers to map identifiers (variables, functions) to metadata: type, scope, memory location (address / offset), etc.
-
-**Relative Address:**
-The offset or displacement from the start of a memory block or segment (useful for relocatable code and in compilers/linkers).
-
-### 🔹 Small Example (conceptual)
-When compiler sees:
-```c
-int x = 10;
-```
-it stores:
-
-| Symbol | Type | Address/Offset |
-|--------|------|----------------|
-| x      | int  | offset +1003 (example) |
-
-This helps generated code refer to variables by offsets.
-
----
-
-## ➕ Pointer Arithmetic
-
-Pointers support arithmetic operations — but semantics depend on the pointed type.
-
-```c
-int arr[3] = {10, 20, 30};
-int *p = arr;      // points to arr[0]
-
-printf("%d\n", *p); // 10
-p++;                // moves to arr[1]
-printf("%d\n", *p); // 20
-```
-
-### 🔑 Rules
-- `p + 1` advances the pointer by `sizeof(*p)` bytes (one element), not by 1 byte
-- On many systems `sizeof(int)` is 4 -> `p+1` moves 4 bytes for `int *`
-- `*ptr++` is parsed as `*(ptr++)` — pointer increments, dereference uses previous location
-- Use `(*ptr)++` to increment the value pointed to by ptr
-
----
-
-## ⚫ Null Pointer
-
-A null pointer points to nothing. Use `NULL` or `0` to initialize.
-
-```c
-int *ptr = NULL;
-if (ptr == NULL) {
-    printf("Pointer is empty\n");
+```java
+class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java!");
+    }
 }
-```
-
-### 🔑 Key
-- Prevents accidental dereference of an invalid address
-- Defined in `<stddef.h>`, `<stdio.h>`, `<stdlib.h>`
-- Always check pointers before dereferencing
-
----
-
-## 🌀 Generic (Void) Pointer
-
-`void *` can hold address of any data type, but cannot be dereferenced until cast.
-
-```c
-int a = 5;
-void *ptr = &a;
-printf("%d\n", *(int *)ptr);  // cast to int before dereferencing
-```
-
-### 🔑 Key Points
-- Type-agnostic pointer: useful in generic APIs (e.g., malloc, callbacks)
-- Must cast to correct type before use
-
----
-
-## 🧩 Pointer to Pointer
-
-Pointer that points to another pointer (multi-level indirection).
-
-```c
-int a = 10;
-int *p = &a;
-int **pp = &p;
-
-printf("%d\n", **pp); // 10
-```
-
-### 🔑 Use Cases
-- Dynamic 2D arrays implemented via pointers-to-pointers
-- Functions that need to modify the pointer passed by caller (e.g., allocate and set a pointer)
-
----
-
-## ⚠ Drawbacks of Pointers
-
-- Incorrect pointer use → crashes / undefined behavior
-- Dangling pointers (pointing to freed memory) cause serious bugs
-- Uninitialized pointers are "wild" — always initialize
-- Memory leaks when dynamically allocated memory isn't freed
-
----
-
-## 🧰 3. Structures
-
-### 🧩 Definition
-A structure (struct) is a user-defined data type that groups related variables (possibly of different types) under a single name.
-
-### 💡 Concept Explanation
-Use struct to model complex real-world entities. Eg: a student record has roll, name, course, fees (different types) — pack into one structure.
-
-### 🧱 Syntax
-```c
-struct student {
-    int r_no;
-    char name[20];
-    char course[20];
-    float fees;
-};
-```
-
-### ⚙ Example
-```c
-struct student stud1 = {1, "Rahul", "BCA", 45000.0};
-printf("Name: %s, Fees: %.2f\n", stud1.name, stud1.fees);
-```
-
-### 🔑 Key Points
-- Structure declaration defines a template — memory allocated only when variable is declared
-- Members accessed with `.` when variable is a direct instance
-
----
-
-## ⚙ Typedef Declaration
-
-`typedef` creates an alias for a type — saves typing and improves readability.
-
-```c
-typedef struct {
-    int r_no;
-    char name[20];
-    char course[20];
-    float fees;
-} student;
-
-student stud1;   // now 'student' is a type name
-```
-
-### 🔑 Note
-`typedef` doesn't create a new type at runtime — it's just an alias for the compiler.
-
----
-
-## 🧱 Initialization of Structures
-
-You can initialize at declaration:
-```c
-struct student s1 = {01, "Rahul", "BCA", 45000.0};
-```
-
-Partial initialization:
-```c
-struct student s2 = {02, "Aman"}; // other members default to 0 or '\0'
-```
-
----
-
-## ⚙ Accessing Members
-
-```c
-s1.r_no = 10;
-strcpy(s1.name, "Dhanush");
-printf("Course: %s\n", s1.course);
-```
-
-Use `scanf("%s", s1.name);` carefully — watch buffer sizes.
-
----
-
-## ✅ Copying and Comparing Structures
-
-You can assign one structure to another of the same type:
-```c
-struct student s1 = {1, "Rahul", "BCA", 45000.0};
-struct student s2;
-s2 = s1; // copies all members
-```
-
-C does not permit direct comparison of whole structs with `==`. Compare members individually:
-```c
-if (s1.fees > s2.fees) { ... }
-```
-
----
-
-## 🔎 Dot (.) and Arrow (->) Operators
-
-Use `.` to access members of a structure variable.  
-Use `->` to access members via a pointer to a structure.
-
-**Example (dot)**
-```c
-struct Point {
-    int x;
-    int y;
-};
-
-struct Point p;
-p.x = 5;
-p.y = 10;
-printf("(%d, %d)\n", p.x, p.y);
-```
-
-**Example (arrow)**
-```c
-struct Point *ptr = &p;
-ptr->x = 7;          // same as (*ptr).x = 7;
-printf("(%d, %d)\n", ptr->x, ptr->y);
-```
-
----
-
-## 🧩 Nested Structures
-
-A structure can contain other structures.
-
-```c
-typedef struct {
-    char first_name[20];
-    char mid_name[20];
-    char last_name[20];
-} NAME;
-
-typedef struct {
-    int dd;
-    int mm;
-    int yy;
-} DATE;
-
-typedef struct {
-    int r_no;
-    NAME name;
-    char course[20];
-    DATE DOB;
-    float fees;
-} student;
-```
-
-Accessing nested members:
-```c
-student s;
-strcpy(s.name.first_name, "Janak");
-s.DOB.dd = 15;
-s.fees = 45000.0;
-```
-
----
-
-## 📚 Arrays of Structures
-
-Store multiple records of the same structure type.
-
-```c
-struct student {
-    int r_no;
-    char name[20];
-    char course[20];
-    float fees;
-};
-
-struct student stud[30];
-```
-
-Initialization at declaration:
-```c
-struct student stud[3] = {
-    {1, "Aman", "BCA", 45000},
-    {2, "Aryan", "BCA", 60000},
-    {3, "John", "BCA", 45000}
-};
-
-printf("%s\n", stud[1].name); // Aryan
-```
-
----
-
-# ⚙ Structures and Functions
-
-You already know a **structure** is a way to store different data types together — like a “mini database” for one object.
-
-Example:
-```c
-struct student {
-    int r_no;
-    char name[20];
-    float fees;
-};
 ````
 
-Now suppose you want to **use this structure inside functions** — to:
+### 🔑 Key Points
 
-* print student details,
-* change student fees,
-* or calculate something.
-
-There are **3 ways** to do that. Let’s understand each slowly 👇
+* Platform Independent (via JVM)
+* Object-Oriented
+* Simple, Secure, Robust
+* Multithreaded and Portable
 
 ---
 
-## 🥇 1️⃣ Passing Individual Members
+## 🧱 2. Basic Structure of a Java Program
 
-Here you pass **just one field** (like `r_no` or `fees`) — *not the entire structure.*
-
-### 🧠 Idea:
-
-You’re saying — “I only need the roll number, not everything.”
-
-### ✅ Example
-
-```c
-#include <stdio.h>
-
-struct student {
-    int r_no;
-    char name[20];
-    float fees;
-};
-
-void showRoll(int r) {
-    printf("Roll Number = %d\n", r);
-}
-
-int main() {
-    struct student s1 = {101, "Dhanush", 25000};
-    showRoll(s1.r_no);  // only pass one value
-    return 0;
+```java
+class ClassName {
+    public static void main(String[] args) {
+        // statements
+    }
 }
 ```
 
-### 🧾 Output
-
-```
-Roll Number = 101
-```
-
-🟢 Easy to understand, but only useful if the function needs one or two members.
+| Part                   | Description               |
+| ---------------------- | ------------------------- |
+| `class`                | Keyword to define a class |
+| `main()`               | Entry point of program    |
+| `System.out.println()` | Prints output to console  |
 
 ---
 
-## 🥈 2️⃣ Passing Entire Structure (By Value)
+## 🧩 3. Java Tokens
 
-Here you pass the **whole structure** into the function.
+Smallest elements of a program.
 
-### 🧠 Idea:
+### Types:
 
-You’re saying — “Here, take a copy of the whole student.”
-
-### ✅ Example
-
-```c
-#include <stdio.h>
-
-struct student {
-    int r_no;
-    char name[20];
-    float fees;
-};
-
-void display(struct student s) {
-    printf("Roll: %d\nName: %s\nFees: %.2f\n", s.r_no, s.name, s.fees);
-}
-
-int main() {
-    struct student s1 = {101, "Dhanush", 25000};
-    display(s1);  // passing the entire structure
-    return 0;
-}
-```
-
-### 🧾 Output
-
-```
-Roll: 101
-Name: Dhanush
-Fees: 25000.00
-```
-
-⚠️ **Important:**
-When you pass a structure like this, **a copy** is made.
-If you change it inside the function, the **original doesn’t change**.
+1. Keywords → `int`, `class`, `if`, `for`, `static`, `void`, etc.
+2. Identifiers → names of variables, classes, methods
+3. Literals → constants (`10`, `'A'`, `"Hello"`, `true`)
+4. Operators → `+`, `-`, `*`, `/`, `=`, `==`, etc.
+5. Separators → `;`, `,`, `{}`, `[]`, `()`
 
 ---
 
-## 🥉 3️⃣ Passing Pointer to Structure (Recommended)
+## 🧮 4. Data Types in Java
 
-This is the most efficient and powerful way.
-You don’t pass a copy — instead, you pass the **address (pointer)** of the structure.
-
-### 🧠 Idea:
-
-You’re saying — “Here’s the address of the student; modify it directly!”
-
-### ✅ Example
-
-```c
-#include <stdio.h>
-
-struct student {
-    int r_no;
-    char name[20];
-    float fees;
-};
-
-// function that changes (updates) fees
-void updateFees(struct student *s, float amount) {
-    s->fees += amount;  // use -> instead of . when using pointer
-}
-
-int main() {
-    struct student s1 = {101, "Dhanush", 25000};
-
-    printf("Before Update: %.2f\n", s1.fees);
-    updateFees(&s1, 5000);  // pass address using &
-    printf("After Update: %.2f\n", s1.fees);
-
-    return 0;
-}
-```
-
-### 🧾 Output
-
-```
-Before Update: 25000.00
-After Update: 30000.00
-```
-
-💡 Because we used a **pointer**, the real data changed (no copy).
+| Type      | Category  | Size              | Example      |
+| --------- | --------- | ----------------- | ------------ |
+| `byte`    | Integer   | 1 byte            | 127          |
+| `short`   | Integer   | 2 bytes           | 32767        |
+| `int`     | Integer   | 4 bytes           | 10000        |
+| `long`    | Integer   | 8 bytes           | 123456789L   |
+| `float`   | Floating  | 4 bytes           | 10.5f        |
+| `double`  | Floating  | 8 bytes           | 23.45        |
+| `char`    | Character | 2 bytes (Unicode) | 'A'          |
+| `boolean` | Logical   | 1 bit             | true / false |
 
 ---
 
-## 🪄 BONUS: Understanding the “→” Arrow Operator
-
-When you pass a pointer to a struct (like `struct student *s`),
-you use `->` instead of `.` to access its members.
-
-| Type             | Access Symbol | Example   |
-| ---------------- | ------------- | --------- |
-| Normal variable  | `.`           | `s1.fees` |
-| Pointer variable | `->`          | `s->fees` |
-
-So:
-
-```c
-s->fees = s->fees + 5000;
-```
-
-means:
-“Go to the structure that `s` points to, and increase its `fees`.”
-
----
-
-## ✅ Final Small Example (Easiest to Visualize)
-
-```c
-#include <stdio.h>
-
-typedef struct {
-    int x;
-    int y;
-} POINT;
-
-void display(POINT p) {          // pass by value (copy)
-    printf("X = %d, Y = %d\n", p.x, p.y);
-}
-
-void movePoint(POINT *p) {       // pass by pointer (real one)
-    p->x += 10;
-    p->y += 5;
-}
-
-int main() {
-    POINT p1 = {2, 3};
-
-    display(p1);       // show original
-    movePoint(&p1);    // pass address
-    display(p1);       // show after change
-
-    return 0;
-}
-```
-
-### 🧾 Output
-
-```
-X = 2, Y = 3
-X = 12, Y = 8
-```
-
----
-
-## 🧠 Summary Table
-
-| Method                   | What You Pass | Changes Original? | Efficient?           |
-| ------------------------ | ------------- | ----------------- | -------------------- |
-| 1️⃣ Individual members   | Single value  | ❌ No              | ✅ Yes                |
-| 2️⃣ Whole structure      | Copy          | ❌ No              | ⚠️ No (creates copy) |
-| 3️⃣ Pointer to structure | Address       | ✅ Yes             | ✅ Very efficient     |
-
----
-
-
-## 🔁 Self-Referential Structures
-
-Structure containing a pointer to its own type — foundation of linked lists.
-
-```c
-struct node {
-    int val;
-    struct node *next;
-};
-```
-
-Use to build:
-- Singly linked lists
-- Stacks/queues (linked)
-- Trees (nodes pointing to children)
-
----
-
-## ▶ Programs (Practice)
-
-1. Declare variables and pointers; display values and addresses using pointers
-2. Swap two numbers using a function (by value and by pointer)
-3. Use structures to read/display student info
-4. Array of structures — read/display information of multiple students
-5. Add/subtract two complex numbers using structures
-
-*(These are classic small practice programs — try implementing them.)*
-
----
-
-## 🧮 4. Introduction to Data Structures — Classification
-
-### Primitive vs Non-Primitive
-- **Primitive**: Basic built-in types (int, char, float, double)
-- **Non-Primitive**: Built using primitives (arrays, structs, lists, trees, graphs)
-
-### Linear vs Non-linear
-- **Linear**: Elements are arranged sequentially (Array, Linked List, Stack, Queue)
-- **Non-linear**: Elements have hierarchical or graph relationships (Tree, Graph)
-
----
-
-## ➿ Arrays
-
-### Definition
-An array is a collection of similar data elements stored at contiguous memory locations and referenced by index (subscript).
+## 🧾 5. Variables & Constants
 
 ### Syntax
-```c
-type name[size];
+
+```java
+datatype variableName = value;
+final datatype CONSTANT_NAME = value;
 ```
 
 ### Example
-```c
-int arr[5] = {1, 2, 3, 4, 5};
-printf("%d\n", arr[2]); // 3
+
+```java
+int age = 20;
+final double PI = 3.14159;
 ```
 
 ### Key Points
-- Fixed size
-- Fast random access (O(1) by index)
-- Insert/delete in middle expensive (shifting)
-- Contiguous memory requirement may cause allocation issues
+
+* `final` makes variable constant (value cannot change)
+* Variable names must begin with letter or underscore
 
 ---
 
-## ➿ Linked Lists
+## ⚙ 6. Operators
 
-### Definition
-A linked list is a dynamic collection of nodes where each node contains data and a pointer to the next node.
+| Type                  | Example                    |   |    |
+| --------------------- | -------------------------- | - | -- |
+| Arithmetic            | `+ - * / %`                |   |    |
+| Relational            | `== != > < >= <=`          |   |    |
+| Logical               | `&&                        |   | !` |
+| Assignment            | `= += -= *= /=`            |   |    |
+| Increment/Decrement   | `++ --`                    |   |    |
+| Conditional (Ternary) | `condition ? true : false` |   |    |
 
-### Node structure
-```c
-struct node {
-    int data;
-    struct node *next;
-};
+---
+
+## 🧠 7. Input & Output in Java
+
+### Input using Scanner
+
+```java
+import java.util.*;
+
+class InputDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter name: ");
+        String name = sc.nextLine();
+        System.out.println("Hello " + name);
+    }
+}
+```
+
+---
+
+## 🔁 8. Control Statements
+
+### a) Conditional
+
+```java
+if (condition) { ... }
+else if (condition) { ... }
+else { ... }
+```
+
+### b) Switch
+
+```java
+switch (choice) {
+    case 1: System.out.println("One"); break;
+    case 2: System.out.println("Two"); break;
+    default: System.out.println("Invalid");
+}
+```
+
+### c) Loops
+
+```java
+for (int i=1; i<=5; i++)
+    System.out.println(i);
+
+while (i<=5) { ... }
+do { ... } while (i<=5);
+```
+
+---
+
+## 🧩 9. Arrays
+
+### Syntax
+
+```java
+datatype[] arr = new datatype[size];
+```
+
+### Example
+
+```java
+int[] marks = {90, 80, 70};
+for (int i : marks)
+    System.out.println(i);
+```
+
+### Multidimensional
+
+```java
+int[][] matrix = { {1,2}, {3,4} };
+System.out.println(matrix[1][0]); // 3
+```
+
+---
+
+## 🧱 10. Methods (Functions in Java)
+
+### Syntax
+
+```java
+returnType methodName(parameters) {
+    // code
+    return value;
+}
+```
+
+### Example
+
+```java
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+### Calling a method
+
+```java
+int sum = add(10, 20);
 ```
 
 ### Key Points
-- Dynamic size (grow/shrink at runtime)
-- Efficient insert/delete (O(1) with pointer manipulation at known positions)
-- Search is O(n)
-- Extra memory for pointers
+
+* Methods can return any type
+* `void` means no return
+* Can be overloaded (same name, different parameters)
 
 ---
 
-## 🗂 Stacks
+## 🧰 11. Method Overloading
 
-### Definition
-LIFO data structure — last inserted, first removed.
+Same method name, different parameter list (number or type).
 
-### Basic operations
-- `push()` — insert at top
-- `pop()` — remove from top
-- `peek()` or `top()` — view top without removing
-
-### Implementations
-- Array-based (fixed size)
-- Linked-list-based (dynamic)
-
-### Key Points
-Useful for recursion, expression evaluation, backtracking.
-
----
-
-## ↔ Queues
-
-### Definition
-FIFO data structure — first inserted, first removed.
-
-### Basic operations
-- `enqueue()` — insert at rear
-- `dequeue()` — remove from front
-
-### Implementations
-- Array-based (circular queue recommended)
-- Linked-list-based
-
-### Key Points
-Useful in scheduling, buffering, BFS on graphs.
-
----
-
-## 🌳 Trees
-
-### Definition
-Non-linear hierarchical data structure with nodes having parent-child relationships. A root node is the top.
-
-### Binary tree node
-```c
-struct node {
-    int data;
-    struct node *left;
-    struct node *right;
-};
+```java
+class MathOps {
+    void add(int a, int b) {
+        System.out.println(a + b);
+    }
+    void add(double a, double b) {
+        System.out.println(a + b);
+    }
+}
 ```
 
-### Key Points
-- Binary tree: each node max two children
-- Balanced vs unbalanced affects search times
-- Special trees: BST (binary search tree), AVL, heap, etc.
-
 ---
 
-## 🔗 Graphs
+## 🧩 12. Static Keyword
 
-### Definition
-Collection of vertices (nodes) and edges (connections) — models networked relationships.
+* Belongs to the **class**, not to objects
+* Can be accessed without creating an object
 
-### Representations
-- Adjacency matrix (dense graphs)
-- Adjacency list (sparse graphs)
-
-### Key Points
-- Useful for routing, social networks, dependency graphs
-- Many important algorithms: BFS, DFS, Dijkstra, Kruskal, Prim
-
----
-
-## 🔧 Operations on Data Structures
-
-| Operation | Meaning | Example |
-|-----------|---------|---------|
-| Traverse | Visit all elements | Print the list |
-| Search | Find data item | Find key in array |
-| Insert | Add element | Add student to list |
-| Delete | Remove element | Delete from queue |
-| Sort | Arrange order | Quick sort array |
-| Merge | Combine | Merge two sorted lists |
-
----
-
-## 🧱 6. Abstract Data Type (ADT)
-
-### 🧩 Definition
-An ADT specifies what operations are available and what behavior is expected, but not how it is implemented.
-
-### 💡 Concept Explanation
-Like a vending machine: you press a button (operation). You don't need to know how its internal mechanism (the implementation) works.
-
-### Example: Stack ADT
-**Operations:**
-```c
-void push(int item);
-int pop(void);
-int isEmpty(void);
+```java
+class Demo {
+    static int count = 0;
+    static void show() {
+        System.out.println("Static method");
+    }
+    public static void main(String[] args) {
+        Demo.show();
+    }
+}
 ```
 
-Implementation can use array or linked list — user's interface remains same.
+---
 
-### 🔑 Advantages
-- **Abstraction**: hide implementation details
-- **Modularity**: swap data structure implementation without changing user code
-- **Reusability and maintainability**
+## 🧱 13. Classes and Objects
+
+### Class — blueprint or template
+
+### Object — instance of a class
+
+```java
+class Student {
+    int id;
+    String name;
+
+    void display() {
+        System.out.println(id + " " + name);
+    }
+}
+
+class Main {
+    public static void main(String[] args) {
+        Student s1 = new Student();
+        s1.id = 101;
+        s1.name = "Dhanush";
+        s1.display();
+    }
+}
+```
 
 ---
 
-## ✅ Summary (Key Takeaways)
+## 🧠 14. Constructors
 
-- Pointers give control over memory (addresses, dynamic allocations), but they require caution
-- Structures let you group different data types into meaningful records
-- Self-referential structures form the basis of dynamic DS (linked lists, trees)
-- Classification: primitive vs non-primitive, linear vs non-linear
-- Operations: traverse, insert, delete, search, sort, merge — fundamental for algorithms
-- ADT separates interface from implementation — a core software engineering principle
+Used to initialize objects automatically when created.
+
+### Types
+
+* Default Constructor
+* Parameterized Constructor
+
+### Example
+
+```java
+class Student {
+    int id;
+    String name;
+
+    Student(int i, String n) {   // constructor
+        id = i;
+        name = n;
+    }
+
+    void display() {
+        System.out.println(id + " " + name);
+    }
+
+    public static void main(String[] args) {
+        Student s1 = new Student(101, "Aman");
+        s1.display();
+    }
+}
+```
 
 ---
 
-## 📎 Example Mini Programs (C)
+## 🧱 15. This Keyword
 
-### 1) Pointer demo
-```c
-#include <stdio.h>
-int main() {
+Refers to **current object**.
+
+```java
+class Demo {
+    int x;
+    Demo(int x) {
+        this.x = x;   // differentiates between local and instance variable
+    }
+}
+```
+
+---
+
+## 🧩 16. Inheritance (Reusability)
+
+Inheritance allows one class to **acquire properties** of another.
+
+### Syntax
+
+```java
+class A {
+    void showA() { System.out.println("Class A"); }
+}
+
+class B extends A {
+    void showB() { System.out.println("Class B"); }
+}
+
+class Main {
+    public static void main(String[] args) {
+        B obj = new B();
+        obj.showA();
+        obj.showB();
+    }
+}
+```
+
+### Types of Inheritance
+
+* Single
+* Multilevel
+* Hierarchical
+  *(Java does not support multiple inheritance directly — use interfaces)*
+
+---
+
+## 🧩 17. Super Keyword
+
+Used to access parent class members.
+
+```java
+class A {
     int x = 10;
-    int *p = &x;
-    printf("Value: %d\n", *p);
-    printf("Address: %p\n", p);
-    return 0;
+}
+class B extends A {
+    int x = 20;
+    void show() {
+        System.out.println(super.x); // 10
+        System.out.println(x);       // 20
+    }
 }
 ```
 
-### 2) Swap using pointers
-```c
-#include <stdio.h>
-void swap(int *a, int *b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
+---
+
+## 🧩 18. Polymorphism
+
+**Poly** = many, **morph** = forms
+Means same function behaves differently depending on context.
+
+### Types:
+
+1. **Compile-time** → Method Overloading
+2. **Runtime** → Method Overriding
+
+---
+
+## ⚙ 19. Method Overriding (Runtime Polymorphism)
+
+Child class provides its own implementation of a parent class method.
+
+```java
+class Animal {
+    void sound() { System.out.println("Animal sound"); }
 }
-int main() {
-    int x = 5, y = 10;
-    swap(&x, &y);
-    printf("x=%d y=%d\n", x, y);
-    return 0;
+class Dog extends Animal {
+    void sound() { System.out.println("Bark"); }
+}
+class Main {
+    public static void main(String[] args) {
+        Animal a = new Dog();   // Upcasting
+        a.sound();              // Bark
+    }
 }
 ```
 
-### 3) Simple struct usage
-```c
-#include <stdio.h>
-typedef struct {
-    int roll;
-    char name[20];
-    float fees;
-} Student;
+---
 
-int main() {
-    Student s = {1, "Aman", 45000.0};
-    printf("Name: %s, Roll: %d, Fees: %.2f\n", s.name, s.roll, s.fees);
-    return 0;
+## 🧩 20. Encapsulation
+
+Wrapping data (variables) and code (methods) together inside a class.
+
+```java
+class Account {
+    private int balance = 10000;
+
+    public void setBalance(int amt) {
+        balance = amt;
+    }
+    public int getBalance() {
+        return balance;
+    }
 }
 ```
 
+### Key Points
+
+* Data Hiding via `private`
+* Access through getters/setters
+
+---
+
+## 🧱 21. Abstraction
+
+Showing only essential features, hiding internal details.
+
+### Using Abstract Class
+
+```java
+abstract class Shape {
+    abstract void draw();  // abstract method
+}
+
+class Circle extends Shape {
+    void draw() {
+        System.out.println("Drawing Circle");
+    }
+}
+```
+
+### Using Interface
+
+```java
+interface Vehicle {
+    void start();
+}
+
+class Bike implements Vehicle {
+    public void start() {
+        System.out.println("Bike Started");
+    }
+}
+```
+
+---
+
+## 🧩 22. Final Keyword
+
+Used with variable, method, and class:
+
+* Variable → cannot be changed
+* Method → cannot be overridden
+* Class → cannot be inherited
+
+```java
+final class A {}
+final int speed = 90;
+```
+
+---
+
+## 🧱 23. Packages
+
+A package is a collection of related classes and interfaces.
+
+```java
+package mypack;
+
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Package Demo");
+    }
+}
+```
+
+---
+
+## 🧩 24. Exception Handling
+
+Used to handle runtime errors gracefully.
+
+### Syntax
+
+```java
+try {
+    int a = 10/0;
+}
+catch (ArithmeticException e) {
+    System.out.println("Cannot divide by zero");
+}
+finally {
+    System.out.println("Always executes");
+}
+```
+
+---
+
+## ⚙ 25. Wrapper Classes
+
+Used to convert primitive data types to objects.
+
+| Primitive | Wrapper   |
+| --------- | --------- |
+| int       | Integer   |
+| char      | Character |
+| boolean   | Boolean   |
+| float     | Float     |
+| double    | Double    |
+
+```java
+int x = 10;
+Integer obj = Integer.valueOf(x);  // boxing
+int y = obj;                       // unboxing
+```
+
+---
+
+## 🧩 26. In-built Classes (String, Math, etc.)
+
+### String
+
+```java
+String s1 = "Java";
+System.out.println(s1.length());
+System.out.println(s1.toUpperCase());
+```
+
+### Math
+
+```java
+System.out.println(Math.sqrt(16));
+System.out.println(Math.pow(2,3));
+```
+
+---
+
+## 🧩 27. Object Class
+
+All classes in Java implicitly inherit from `Object` class.
+
+| Common Methods | Description               |
+| -------------- | ------------------------- |
+| `toString()`   | Converts object to string |
+| `equals()`     | Compares two objects      |
+| `hashCode()`   | Returns hash value        |
+
+---
+
+## 🧠 SUMMARY TABLE
+
+| Concept       | Meaning                 | Keyword/Feature            |
+| ------------- | ----------------------- | -------------------------- |
+| Class         | Blueprint for objects   | `class`                    |
+| Object        | Instance of class       | `new`                      |
+| Inheritance   | Reuse code              | `extends`                  |
+| Polymorphism  | One name, many forms    | Overloading / Overriding   |
+| Encapsulation | Data hiding             | `private`, getters/setters |
+| Abstraction   | Hiding internal details | `abstract`, `interface`    |
+
+---
+
+## 🧮 SAMPLE PROGRAMS
+
+### 1️⃣ Simple Class and Object
+
+```java
+class Student {
+    int id;
+    String name;
+}
+```
+
+### 2️⃣ Constructor Example
+
+```java
+class Student {
+    int id;
+    String name;
+    Student(int i, String n) {
+        id = i; name = n;
+    }
+}
+```
+
+### 3️⃣ Inheritance Example
+
+```java
+class A { void msg(){ System.out.println("A"); } }
+class B extends A { void show(){ System.out.println("B"); } }
+```
+
+### 4️⃣ Polymorphism Example
+
+```java
+class Shape { void draw(){ System.out.println("Draw"); } }
+class Circle extends Shape { void draw(){ System.out.println("Circle"); } }
+```
+
+---
+
+## ✅ FINAL TAKEAWAYS
+
+* Java = Object-Oriented + Platform Independent
+* Everything is inside a class
+* Master the 4 pillars: **Encapsulation, Inheritance, Polymorphism, Abstraction**
+* Use constructors to initialize
+* Use `this` and `super` carefully
+* Understand difference between **compile-time** and **runtime polymorphism**
+
+---
+
+# 🏁 END OF MODULE 1 — JAVA BASICS + OOP COMPLETE
+
+```
+
+---
+
+Would you like me to continue this same style for **Module 2 — Advanced Java (Interfaces, Packages, Threads, File Handling, Exception Handling in depth)** next?
+```
