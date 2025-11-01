@@ -1,5 +1,4 @@
 
-````md
 # ☕ JAVA MODULE 1 — Core Concepts + OOP (Complete Notes)
 
 ---
