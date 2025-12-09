@@ -143,12 +143,12 @@ int main() {
     printf("Enter location: ");
     scanf("%49s", location);
 
-    // build file name: Mysore -> Mysore.txt
     sprintf(filename, "%s.txt", location);
 
     FILE *fp = fopen(filename, "r");
     if (!fp) {
         printf("Error: Cannot open file %s\n", filename);
+        printf("Make sure the file exists in the current directory.\n");
         return 1;
     }
 
@@ -159,13 +159,20 @@ int main() {
 
     inputMonth = getMonthNumber(monthInput);
     if (inputMonth == -1) {
-        printf("Invalid month input.\n");
+        printf("Invalid month input. Please use 1-12 or names like Jan/January.\n");
         fclose(fp);
         return 1;
     }
 
     printf("Enter Year: ");
     scanf("%d", &inputYear);
+    
+    // ADD: Year validation
+    if (inputYear < 1900 || inputYear > 2100) {
+        printf("Invalid year. Please enter a year between 1900-2100.\n");
+        fclose(fp);
+        return 1;
+    }
 
     char choice[10];
     int useRange = 0;
@@ -178,16 +185,29 @@ int main() {
         useRange = 1;
     }
 
-    int fromDay = 1, toDay = 31;  // default entire month
+    int fromDay = 1, toDay = 31;
 
     if (useRange) {
         printf("Enter FROM day (1-31): ");
         scanf("%d", &fromDay);
+        
+        // ADD: Day validation
+        if (fromDay < 1 || fromDay > 31) {
+            printf("Invalid day. Must be between 1-31.\n");
+            fclose(fp);
+            return 1;
+        }
 
         printf("Enter TO day (1-31): ");
         scanf("%d", &toDay);
+        
+        // ADD: Day validation
+        if (toDay < 1 || toDay > 31) {
+            printf("Invalid day. Must be between 1-31.\n");
+            fclose(fp);
+            return 1;
+        }
 
-        // Simple safety: if user reverses them, swap
         if (fromDay > toDay) {
             int temp = fromDay;
             fromDay = toDay;
